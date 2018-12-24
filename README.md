@@ -1,6 +1,8 @@
 # messengerAnalytics
 python analysis tool for Facebook messenger data
 
+Download your Facebook messages data in JSON format from Facebook.
+
 ## measure and plot metrics such as:
 - Avg number of messages per day during friendship
 - Ratio of messages sent by me to messages received
