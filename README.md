@@ -1,7 +1,10 @@
 # messengerAnalytics
 python analysis tool for Facebook messenger data
 
-Download your Facebook messages data in JSON format from Facebook.
+1. Download your Facebook messages data in JSON format from Facebook.
+2. Install Python dependencies and download messengerAnalytics.py
+3. Place all Facebook conversation folders in directory: ./data/messages/*
+4. Run Python script from command line
 
 ## measure and plot metrics such as:
 - Avg number of messages per day during friendship
