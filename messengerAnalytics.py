@@ -1,12 +1,11 @@
 import json
 import datetime
-import os, errno
+import sys, os, errno
 import pickle
 import math
 import random
 import numpy as np
 import pandas as pd
-import re
 
 import matplotlib
 matplotlib.use('Agg')
@@ -16,7 +15,7 @@ import seaborn as sns
 from sklearn.preprocessing import scale
 from textblob import TextBlob
 
-MY_NAME = 'Raymond Situ'
+MY_NAME = 'YOUR NAME HERE'
 DIR = "./data/messages/"
 MIN_CONVO_LENGTH = 7000
 POLARITY_BIN_SIZE = 200
@@ -77,6 +76,9 @@ def load_dict():
         with open('./data.pickle', 'rb') as infile:
             dataset = pickle.load(infile)
     else:
+        if len(os.listdir(DIR)) < 1:
+            print 'no conversation folders found'
+            sys.exit()
         for foldername in os.listdir(DIR):
             name,json_data = read_json(foldername)
             if len(json_data) > 0:
@@ -273,7 +275,12 @@ def plot_best_worst(k):
 def get_words_freq(messages, k):
     word_freq = dict()
     for msg in messages:
-        if 'content' not in msg.keys():
+        keys = msg.keys()
+        if 'content' not in keys:
+            continue
+        if 'gifs' in keys or 'sticker' in keys or 'photos' in keys or 'files' in keys or 'are now connected on' in msg['content']:
+            continue
+        if msg['type'] == 'Call':
             continue
         filtered_words = [word.lower() for word in msg['content'].split(' ') if word.lower() not in stopwords]
         for word in filtered_words:
@@ -356,6 +363,7 @@ def analyze(dataset):
         metrics['responsiveness'][name] = get_responsiveness(dataset[name])
         metrics['avg_polarity'][name] = get_avg_polarity(dataset[name], name)
         metrics['avg_photo_share'][name] = get_avg_photos(dataset[name], name)
+        plot_bin_polarity(dataset[name], name)
 
     plot_metric('avg_polarity', 'Avg polarity of messages', 'polarity [-1,1]')
     plot_metric('avg_msg', 'Avg number of messages per day during friendship', 'messages')
